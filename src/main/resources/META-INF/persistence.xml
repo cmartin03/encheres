@@ -3,6 +3,7 @@
   <persistence-unit name="enchere" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>fr.insastrasbourg.data.Utilisateur</class>
+    <class>fr.insastrasbourg.data.Objet</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/enchere"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

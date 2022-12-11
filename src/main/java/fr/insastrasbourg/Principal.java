@@ -4,7 +4,8 @@
  */
 package fr.insastrasbourg;
 
-import fr.insastrasbourg.ui.Inscription;
+import fr.insastrasbourg.data.Utilisateur;
+import fr.insastrasbourg.ui.Connexion;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -16,6 +17,8 @@ import javax.persistence.Persistence;
 public class Principal extends javax.swing.JFrame {
 
     private static EntityManager em;
+    private static Utilisateur utilisateurConnecte;
+
     /**
      * Creates new form Principal
      */
@@ -29,6 +32,15 @@ public class Principal extends javax.swing.JFrame {
     public static EntityManager getEntityManager() {
         return em;
     }
+
+    public static Utilisateur getUtilisateurConnecte() {
+        return utilisateurConnecte;
+    }
+
+    public static void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
+        Principal.utilisateurConnecte = utilisateurConnecte;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,12 +52,7 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lblEmail = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
-        lblPass = new javax.swing.JLabel();
-        txtPass = new javax.swing.JTextField();
         btnConnexion = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        btnInscription = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -60,18 +67,14 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblEmail.setText("email");
-
-        lblPass.setText("password");
+        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        lblEmail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/enchere.png"))); // NOI18N
+        lblEmail.setText("Encheres INSA");
 
         btnConnexion.setText("Connexion");
-
-        jLabel1.setText("Pas encore de compte ?");
-
-        btnInscription.setText("Inscription");
-        btnInscription.addActionListener(new java.awt.event.ActionListener() {
+        btnConnexion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInscriptionActionPerformed(evt);
+                btnConnexionActionPerformed(evt);
             }
         });
 
@@ -80,57 +83,32 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(55, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEmail)
-                            .addComponent(lblPass))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtEmail)
-                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
-                        .addGap(33, 33, 33))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnConnexion)
-                        .addGap(147, 147, 147))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnInscription)
-                        .addGap(148, 148, 148))))
+                .addGap(17, 17, 17)
+                .addComponent(lblEmail)
+                .addGap(0, 17, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(btnConnexion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmail)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPass)
-                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnConnexion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnInscription)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(266, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscriptionActionPerformed
-        Inscription dialog = new Inscription(this, true);
+    private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
+        // TODO add your handling code here:
+        Connexion dialog = new Connexion();
         dialog.setVisible(true);
-    }//GEN-LAST:event_btnInscriptionActionPerformed
+    }//GEN-LAST:event_btnConnexionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,12 +147,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConnexion;
-    private javax.swing.JButton btnInscription;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblPass;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtPass;
     // End of variables declaration//GEN-END:variables
 }
