@@ -9,6 +9,7 @@ import fr.insastrasbourg.ui.Connexion;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JLabel;
 
 /**
  *
@@ -27,6 +28,9 @@ public class Principal extends javax.swing.JFrame {
         
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "enchere" );
         em = emfactory.createEntityManager();
+        
+        lbl1.setVisible(false);
+        lbl2.setVisible(false);
     }
 
     public static EntityManager getEntityManager() {
@@ -40,6 +44,23 @@ public class Principal extends javax.swing.JFrame {
     public static void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
         Principal.utilisateurConnecte = utilisateurConnecte;
     }
+
+    public JLabel getLbl1() {
+        return lbl1;
+    }
+
+    public void setLbl1(JLabel lbl1) {
+        this.lbl1 = lbl1;
+    }
+
+    public JLabel getLbl2() {
+        return lbl2;
+    }
+
+    public void setLbl2(JLabel lbl2) {
+        this.lbl2 = lbl2;
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +74,8 @@ public class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblEmail = new javax.swing.JLabel();
         btnConnexion = new javax.swing.JButton();
+        lbl2 = new javax.swing.JLabel();
+        lbl1 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -78,6 +101,10 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        lbl2.setText("Connecté, vous pouvez enchérir et vendre des objets");
+
+        lbl1.setText("Bienvenue ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,7 +115,10 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(0, 17, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
-                .addComponent(btnConnexion)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl1)
+                    .addComponent(lbl2)
+                    .addComponent(btnConnexion))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -98,7 +128,11 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnConnexion)
-                .addContainerGap(266, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(lbl1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl2)
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         pack();
@@ -106,7 +140,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
         // TODO add your handling code here:
-        Connexion dialog = new Connexion();
+        Connexion dialog = new Connexion(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnConnexionActionPerformed
 
@@ -148,6 +182,8 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConnexion;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbl1;
+    private javax.swing.JLabel lbl2;
     private javax.swing.JLabel lblEmail;
     // End of variables declaration//GEN-END:variables
 }

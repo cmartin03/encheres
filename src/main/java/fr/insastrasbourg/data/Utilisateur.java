@@ -29,6 +29,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Utilisateur.findByNom", query = "SELECT u FROM Utilisateur u WHERE u.nom = :nom"),
     @NamedQuery(name = "Utilisateur.findByPrenom", query = "SELECT u FROM Utilisateur u WHERE u.prenom = :prenom"),
     @NamedQuery(name = "Utilisateur.findByEmail", query = "SELECT u FROM Utilisateur u WHERE u.email = :email"),
+    @NamedQuery(name = "Utilisateur.findByEmailAndPassword", query = "SELECT u FROM Utilisateur u WHERE u.email = :email and u.password = :password"),
     @NamedQuery(name = "Utilisateur.findByCodePostal", query = "SELECT u FROM Utilisateur u WHERE u.codePostal = :codePostal")})
 public class Utilisateur implements Serializable {
 
@@ -47,6 +48,8 @@ public class Utilisateur implements Serializable {
     private String prenom;
     @Column(name = "email")
     private String email;
+    @Column(name = "password")
+    private String password;
     @Column(name = "code_postal")
     private String codePostal;
 
@@ -89,6 +92,15 @@ public class Utilisateur implements Serializable {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    
     public String getCodePostal() {
         return codePostal;
     }
