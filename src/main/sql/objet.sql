@@ -1,6 +1,6 @@
 -- Table: public.objet
 
--- DROP TABLE IF EXISTS public.objet;
+DROP TABLE IF EXISTS public.objet;
 
 CREATE TABLE IF NOT EXISTS public.objet
 (

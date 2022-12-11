@@ -145,7 +145,7 @@ public class Connexion extends javax.swing.JFrame {
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
         // TODO add your handling code here:
-        EntityManager em = Principal.getEntityManager();
+        EntityManager em = principal.getEntityManager();
         
         List<Utilisateur> list = em.createNamedQuery("Utilisateur.findByEmailAndPassword")
                 .setParameter("email", txtEmail.getText())
@@ -159,11 +159,12 @@ public class Connexion extends javax.swing.JFrame {
         
         lblMsgError.setVisible(false);
         Utilisateur u = list.get(0);
-        Principal.setUtilisateurConnecte(u);
+        principal.setUtilisateurConnecte(u);
         
         principal.getLbl1().setText("Bienvenue " + u.getPrenom() + " " + u.getNom());
         principal.getLbl1().setVisible(true);
         principal.getLbl2().setVisible(true);
+        principal.getBtnAddObjet().setVisible(true);
         
         this.setVisible(false);
     }//GEN-LAST:event_btnConnexionActionPerformed

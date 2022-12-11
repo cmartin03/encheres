@@ -6,9 +6,11 @@ package fr.insastrasbourg;
 
 import fr.insastrasbourg.data.Utilisateur;
 import fr.insastrasbourg.ui.Connexion;
+import fr.insastrasbourg.ui.EnchereUI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 /**
@@ -17,8 +19,8 @@ import javax.swing.JLabel;
  */
 public class Principal extends javax.swing.JFrame {
 
-    private static EntityManager em;
-    private static Utilisateur utilisateurConnecte;
+    private EntityManager em;
+    private Utilisateur utilisateurConnecte;
 
     /**
      * Creates new form Principal
@@ -31,18 +33,19 @@ public class Principal extends javax.swing.JFrame {
         
         lbl1.setVisible(false);
         lbl2.setVisible(false);
+        btnAddObjet.setVisible(false);
     }
 
-    public static EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 
-    public static Utilisateur getUtilisateurConnecte() {
+    public Utilisateur getUtilisateurConnecte() {
         return utilisateurConnecte;
     }
 
-    public static void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
-        Principal.utilisateurConnecte = utilisateurConnecte;
+    public void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
+        this.utilisateurConnecte = utilisateurConnecte;
     }
 
     public JLabel getLbl1() {
@@ -60,6 +63,14 @@ public class Principal extends javax.swing.JFrame {
     public void setLbl2(JLabel lbl2) {
         this.lbl2 = lbl2;
     }
+
+    public JButton getBtnAddObjet() {
+        return btnAddObjet;
+    }
+
+    public void setBtnAddObjet(JButton btnAddObjet) {
+        this.btnAddObjet = btnAddObjet;
+    }
     
     
     /**
@@ -76,6 +87,7 @@ public class Principal extends javax.swing.JFrame {
         btnConnexion = new javax.swing.JButton();
         lbl2 = new javax.swing.JLabel();
         lbl1 = new javax.swing.JLabel();
+        btnAddObjet = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,6 +117,13 @@ public class Principal extends javax.swing.JFrame {
 
         lbl1.setText("Bienvenue ");
 
+        btnAddObjet.setText("Ajouter un objet");
+        btnAddObjet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddObjetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,6 +135,7 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddObjet)
                     .addComponent(lbl1)
                     .addComponent(lbl2)
                     .addComponent(btnConnexion))
@@ -132,7 +152,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(lbl1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbl2)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(btnAddObjet)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
         pack();
@@ -143,6 +165,12 @@ public class Principal extends javax.swing.JFrame {
         Connexion dialog = new Connexion(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnConnexionActionPerformed
+
+    private void btnAddObjetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddObjetActionPerformed
+        // TODO add your handling code here:
+        EnchereUI e = new EnchereUI(this);
+        e.setVisible(true);
+    }//GEN-LAST:event_btnAddObjetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,6 +208,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddObjet;
     private javax.swing.JButton btnConnexion;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbl1;

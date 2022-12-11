@@ -14,6 +14,8 @@ import javax.persistence.EntityManager;
  */
 public class Inscription extends javax.swing.JDialog {
 
+    Principal principal;
+    
     /**
      * Creates new form Inscription
      */
@@ -24,6 +26,10 @@ public class Inscription extends javax.swing.JDialog {
         btnFermer.setVisible(false);
     }
 
+    public Inscription(java.awt.Frame parent, boolean modal, Principal principal) {
+        this(parent, modal);
+        this.principal = principal;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,7 +172,7 @@ public class Inscription extends javax.swing.JDialog {
 
     private void btnInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscriptionActionPerformed
         
-        EntityManager em = Principal.getEntityManager();
+        EntityManager em = principal.getEntityManager();
         em.getTransaction( ).begin( );
         
         Utilisateur u = new Utilisateur();
