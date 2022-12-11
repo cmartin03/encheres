@@ -139,7 +139,7 @@ public class Connexion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscriptionActionPerformed
-        Inscription dialog = new Inscription(this, true);
+        Inscription dialog = new Inscription(this, true, principal);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnInscriptionActionPerformed
 
