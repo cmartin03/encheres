@@ -31,6 +31,8 @@ public class Principal extends javax.swing.JFrame {
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "enchere" );
         em = emfactory.createEntityManager();
         
+        //lbl1 (bienvenue), lbl2 (connecté..), btnAddObjet, visible uniquement une fois qu'on esst connecté 
+        
         lbl1.setVisible(false);
         lbl2.setVisible(false);
         btnAddObjet.setVisible(false);
@@ -72,6 +74,7 @@ public class Principal extends javax.swing.JFrame {
         this.btnAddObjet = btnAddObjet;
     }
     
+    //Code qui se génère automatiquement quand on ajoute des boutons 
     
     /**
      * This method is called from within the constructor to initialize the form.

@@ -24,7 +24,7 @@ public class Connexion extends javax.swing.JFrame {
         initComponents();
         
         this.principal = principal;
-        
+        // message d'erreur visible uniquement lorsque l'email ne correspond pas à un email inscrit dans la BDD
         lblMsgError.setVisible(false);
     }
 
