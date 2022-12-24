@@ -34,6 +34,9 @@ import javax.persistence.Table;
 public class Utilisateur implements Serializable {
 
     @OneToMany(mappedBy = "utilisateur")
+    private List<Enchere> enchereList;
+
+    @OneToMany(mappedBy = "utilisateur")
     private List<Objet> objetList;
 
     private static final long serialVersionUID = 1L;
@@ -140,6 +143,14 @@ public class Utilisateur implements Serializable {
 
     public void setObjetList(List<Objet> objetList) {
         this.objetList = objetList;
+    }
+
+    public List<Enchere> getEnchereList() {
+        return enchereList;
+    }
+
+    public void setEnchereList(List<Enchere> enchereList) {
+        this.enchereList = enchereList;
     }
     
 }

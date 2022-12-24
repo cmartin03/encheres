@@ -5,10 +5,12 @@
 package fr.insastrasbourg.ui;
 
 import fr.insastrasbourg.Principal;
+import fr.insastrasbourg.data.Categorie;
 import fr.insastrasbourg.data.Objet;
-import fr.insastrasbourg.data.Utilisateur;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +25,8 @@ public class ConsulterEnchere extends javax.swing.JFrame {
 
     /**
      * Creates new form ConsulterEnchere
+     *
+     * @param principal
      */
     public ConsulterEnchere(Principal principal) {
         initComponents();
@@ -31,13 +35,23 @@ public class ConsulterEnchere extends javax.swing.JFrame {
 
         EntityManager em = principal.getEntityManager();
 
-        objets = em.createNamedQuery("Objet.findAll")
+        // liste de toutes les categories
+        List<Categorie> cats = em.createNamedQuery("Categorie.findAll")
                 .getResultList();
 
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        for (Objet o : objets) {
-            model.addRow(o.toArray());
-        }
+        // liste des différentes catégories
+        List<String> cs = cats.stream()
+                .map(p -> p.getCategorie())
+                .distinct().toList();
+        List<String> cs2 = new ArrayList<>();
+        cs2.add("");
+        cs2.addAll(cs);
+
+        DefaultComboBoxModel dcbm = new DefaultComboBoxModel(cs2.toArray());
+        cbCategorie.setModel(dcbm);
+
+        doAffichage();
+
     }
 
     /**
@@ -55,6 +69,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnFermer = new javax.swing.JButton();
+        cbCategorie = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,23 +119,26 @@ public class ConsulterEnchere extends javax.swing.JFrame {
             }
         });
 
+        cbCategorie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbCategorie, 0, 329, Short.MAX_VALUE)
+                            .addComponent(txtSearch))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSearch))
                     .addComponent(btnFermer)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnSearch))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,13 +146,16 @@ public class ConsulterEnchere extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbCategorie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnFermer)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         pack();
@@ -147,23 +168,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        EntityManager em = principal.getEntityManager();
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        if (model.getRowCount() > 0) {
-            for (int i = model.getRowCount() - 1; i > -1; i--) {
-                model.removeRow(i);
-            }
-        }
-
-        objets = em.createNamedQuery("Objet.findByLibelle")
-                .setParameter("libelle", txtSearch.getText())
-                .getResultList();
-
-        for (Objet o : objets) {
-            model.addRow(o.toArray());
-        }
-        jTable1.setModel(model);
+        doAffichage();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -172,7 +177,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
         int row = source.rowAtPoint(evt.getPoint());
 
         Objet o = objets.get(row);
-        VoirObjet v = new VoirObjet(o);
+        VoirObjet v = new VoirObjet(principal, o, this);
         v.setVisible(true);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -214,9 +219,43 @@ public class ConsulterEnchere extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFermer;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cbCategorie;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    public void doAffichage() {
+        EntityManager em = principal.getEntityManager();
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        if (model.getRowCount() > 0) {
+            for (int i = model.getRowCount() - 1; i > -1; i--) {
+                model.removeRow(i);
+            }
+        }
+
+        String t = txtSearch.getText();
+        String c = cbCategorie.getSelectedItem().toString();
+
+        if (t.equals("") && c.equals("")) {
+            objets = em.createNamedQuery("Objet.findAll")
+                    .getResultList();
+        } else if (c.equals("")) {
+            objets = em.createNamedQuery("Objet.findByLibelle")
+                    .setParameter("libelle", t)
+                    .getResultList();
+        } else if (t.equals("")) {
+            objets = em.createNamedQuery("Objet.findByCategorie")
+                    .setParameter("categorie", c)
+                    .getResultList();
+        }
+
+        for (Objet o : objets) {
+            model.addRow(o.toArray());
+        }
+        jTable1.setModel(model);
+
+    }
 }

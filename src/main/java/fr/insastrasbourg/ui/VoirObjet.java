@@ -4,7 +4,11 @@
  */
 package fr.insastrasbourg.ui;
 
+import fr.insastrasbourg.Principal;
+import fr.insastrasbourg.data.Enchere;
 import fr.insastrasbourg.data.Objet;
+import javax.persistence.EntityManager;
+import javax.swing.text.AbstractDocument;
 
 /**
  *
@@ -13,18 +17,39 @@ import fr.insastrasbourg.data.Objet;
 public class VoirObjet extends javax.swing.JFrame {
 
     Objet objet;
+    Principal principal;
+    ConsulterEnchere consulterEnchere;
     
     /**
      * Creates new form VoirObjet
      */
-    public VoirObjet(Objet objet) {
+    public VoirObjet(Principal principal, Objet objet, ConsulterEnchere consulterEnchere) {
         initComponents();
         
         this.objet = objet;
+        this.principal = principal;
+        this.consulterEnchere = consulterEnchere;
         
         lblLibelle.setText(objet.getLibelle());
         txtDesc.setText(objet.getDescription());
         lblDteFinEnchere.setText(objet.getDateFinEnchereAsString());
+        lblErreurEnchere.setText("");
+        
+        // affichage liste de encheres
+        
+        // on ne peut encherir que si ont est connecté
+        if (principal.getUtilisateurConnecte()==null) {
+            panelNvlEnchere.setVisible(false);
+        }
+                
+        int prix = objet.getDernierPrix() + 1;
+        txtNvleEnchere.setText( String.valueOf(prix));
+        
+        // Add the document filter to text field for numeric and length check.
+        ((AbstractDocument) txtNvleEnchere.getDocument()).setDocumentFilter(new NumericAndLengthFilter(5));
+
+     
+        doAffichageEncheres();
     }
 
     /**
@@ -42,6 +67,15 @@ public class VoirObjet extends javax.swing.JFrame {
         txtDesc = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         lblDteFinEnchere = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtEncheres = new javax.swing.JTextArea();
+        panelNvlEnchere = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtNvleEnchere = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btnEncherir = new javax.swing.JButton();
+        lblErreurEnchere = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +97,63 @@ public class VoirObjet extends javax.swing.JFrame {
 
         lblDteFinEnchere.setText("jLabel2");
 
+        jLabel2.setText("Encheres");
+
+        txtEncheres.setEditable(false);
+        txtEncheres.setColumns(20);
+        txtEncheres.setRows(5);
+        jScrollPane2.setViewportView(txtEncheres);
+
+        jLabel3.setText("Nouvelle enchère");
+
+        txtNvleEnchere.setText("jTextField1");
+
+        jLabel4.setText("€");
+
+        btnEncherir.setText("Enchérir");
+        btnEncherir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEncherirActionPerformed(evt);
+            }
+        });
+
+        lblErreurEnchere.setForeground(new java.awt.Color(255, 0, 0));
+        lblErreurEnchere.setText("jLabel5");
+
+        javax.swing.GroupLayout panelNvlEnchereLayout = new javax.swing.GroupLayout(panelNvlEnchere);
+        panelNvlEnchere.setLayout(panelNvlEnchereLayout);
+        panelNvlEnchereLayout.setHorizontalGroup(
+            panelNvlEnchereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelNvlEnchereLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(panelNvlEnchereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelNvlEnchereLayout.createSequentialGroup()
+                        .addComponent(lblErreurEnchere)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelNvlEnchereLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(4, 4, 4)
+                        .addComponent(txtNvleEnchere, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addComponent(btnEncherir)
+                        .addGap(15, 15, 15))))
+        );
+        panelNvlEnchereLayout.setVerticalGroup(
+            panelNvlEnchereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelNvlEnchereLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(panelNvlEnchereLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNvleEnchere, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(btnEncherir))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblErreurEnchere)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,12 +168,15 @@ public class VoirObjet extends javax.swing.JFrame {
                         .addComponent(lblDteFinEnchere, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
-                            .addComponent(lblLibelle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblLibelle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnFermer, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnFermer)))
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2))
+                            .addComponent(panelNvlEnchere, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(22, 22, 22))))
         );
         layout.setVerticalGroup(
@@ -96,9 +190,15 @@ public class VoirObjet extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(lblDteFinEnchere))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelNvlEnchere, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addComponent(btnFermer)
-                .addGap(15, 15, 15))
+                .addContainerGap())
         );
 
         pack();
@@ -106,9 +206,41 @@ public class VoirObjet extends javax.swing.JFrame {
 
     private void btnFermerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFermerActionPerformed
 
-        // TODO add your handling code here:
+        // on met à jour la liste des objets avec le nouveau prix
+        consulterEnchere.doAffichage();
+        
         this.setVisible(false);
     }//GEN-LAST:event_btnFermerActionPerformed
+
+    private void btnEncherirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncherirActionPerformed
+        // TODO add your handling code here:
+        // le montant doit être supérieur à la dernière enchere
+        int prix = Integer.parseInt(txtNvleEnchere.getText());
+        
+        if (prix <= objet.getDernierPrix()) {
+            lblErreurEnchere.setText("Le montant de l'enchère doit être supérieur à " + objet.getDernierPrix() + "€");
+            lblErreurEnchere.setVisible(true);
+            return;
+        }
+        else {
+            lblErreurEnchere.setVisible(false);
+        }
+        
+        EntityManager em = principal.getEntityManager();
+        em.getTransaction( ).begin( );
+        
+        Enchere e = new Enchere();
+        e.setObjet(objet);
+        e.setPrix(prix);
+        e.setUtilisateur(principal.getUtilisateurConnecte());
+        
+        em.persist(e);
+        em.getTransaction().commit();
+        
+        objet.getEnchereList().add(e);
+        doAffichageEncheres();
+        
+    }//GEN-LAST:event_btnEncherirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,17 +272,36 @@ public class VoirObjet extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VoirObjet(null).setVisible(true);
+                new VoirObjet(null,null,null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEncherir;
     private javax.swing.JButton btnFermer;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDteFinEnchere;
+    private javax.swing.JLabel lblErreurEnchere;
     private javax.swing.JLabel lblLibelle;
+    private javax.swing.JPanel panelNvlEnchere;
     private javax.swing.JTextArea txtDesc;
+    private javax.swing.JTextArea txtEncheres;
+    private javax.swing.JTextField txtNvleEnchere;
     // End of variables declaration//GEN-END:variables
+
+    private void doAffichageEncheres() {
+        String s = "";
+        
+        for (Enchere e : objet.getEnchereList()) {
+            s += e.getUtilisateur().getPrenom() + " " + e.getUtilisateur().getNom() + " " + e.getPrix() + "€\n";
+        }
+        txtEncheres.setText(s);
+    }
+    
 }

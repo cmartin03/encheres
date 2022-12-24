@@ -5,11 +5,14 @@
 package fr.insastrasbourg.ui;
 
 import fr.insastrasbourg.Principal;
+import fr.insastrasbourg.data.Categorie;
 import fr.insastrasbourg.data.Objet;
 import fr.insastrasbourg.data.Utilisateur;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.NumberFormatter;
 
@@ -22,6 +25,7 @@ public class CreerObjet extends javax.swing.JFrame {
     Principal principal;
     /**
      * Creates new form EnchereUI
+     * @param principal
      */
     public CreerObjet(Principal principal) {
         initComponents();
@@ -34,6 +38,24 @@ public class CreerObjet extends javax.swing.JFrame {
 
         // Add the document filter to text field for numeric and length check.
         ((AbstractDocument) txtPrix.getDocument()).setDocumentFilter(new NumericAndLengthFilter(5));
+        
+        // liste des catégories
+        EntityManager em = principal.getEntityManager();
+
+        // liste de toutes les categories
+        List<Categorie> cats = em.createNamedQuery("Categorie.findAll")
+                .getResultList();
+
+        // liste des différentes catégories
+        List<String> cs = cats.stream()
+                .map(p -> p.getCategorie())
+                .distinct().toList();
+        
+        DefaultComboBoxModel dcbm = new DefaultComboBoxModel(cs.toArray());
+        cbCategorie.setModel(dcbm);
+        
+        // on affiche les sous categorie de la premiere catagorie
+        afficheSousCategorie(cats.get(0).getCategorie());
     }
 
     /**
@@ -59,6 +81,10 @@ public class CreerObjet extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnValider = new javax.swing.JButton();
         txtPrix = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        cbCategorie = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        cbSousCategorie = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +116,19 @@ public class CreerObjet extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Catégorie");
+
+        cbCategorie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCategorie.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbCategorieItemStateChanged(evt);
+            }
+        });
+
+        jLabel9.setText("Sous catégorie");
+
+        cbSousCategorie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,6 +136,7 @@ public class CreerObjet extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -106,22 +146,27 @@ public class CreerObjet extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txtLibelle, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDebut, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnValider)
-                                .addComponent(dateFinChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(txtPrix, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addGap(18, 18, 18)
+                            .addComponent(cbSousCategorie, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblDebut, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnValider)
+                                    .addComponent(dateFinChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(txtPrix, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cbCategorie, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -150,7 +195,15 @@ public class CreerObjet extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(txtPrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(cbCategorie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cbSousCategorie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(btnValider)
                 .addGap(17, 17, 17))
         );
@@ -171,12 +224,45 @@ public class CreerObjet extends javax.swing.JFrame {
         o.setPrixInitial(Integer.parseInt(txtPrix.getText()) );
         o.setUtilisateur(principal.getUtilisateurConnecte());
         
+        // recherche de la categorie
+        String cat = cbCategorie.getSelectedItem().toString();
+        String sousCat = cbSousCategorie.getSelectedItem().toString();
+        Categorie cate = (Categorie) em.createNamedQuery("Categorie.findByCategorieAndSousCategorie")
+                .setParameter("categorie", cat)
+                .setParameter("sousCategorie", sousCat)
+                .getSingleResult();
+        o.setCategorie(cate);
+        
         em.persist(o);
         em.getTransaction().commit();
         
         this.setVisible(false);
     }//GEN-LAST:event_btnValiderActionPerformed
 
+    private void cbCategorieItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategorieItemStateChanged
+        // TODO add your handling code here:
+        String cat = (String) evt.getItem();
+        
+        afficheSousCategorie(cat);
+ 
+    }//GEN-LAST:event_cbCategorieItemStateChanged
+
+    public void afficheSousCategorie(String cat) {
+               EntityManager em = principal.getEntityManager();
+        
+        // liste de toutes les sous categories de cette categorie
+        List<Categorie> cats = em.createNamedQuery("Categorie.findByCategorie")
+                .setParameter("categorie", cat)
+                .getResultList();
+
+        // liste des différentes souscatégories
+        List<String> cs = cats.stream()
+                .map(p -> p.getSousCategorie())
+                .distinct().toList();
+        
+        DefaultComboBoxModel dcbm = new DefaultComboBoxModel(cs.toArray());
+        cbSousCategorie.setModel(dcbm);
+    }
     /**
      * @param args the command line arguments
      */
@@ -217,6 +303,8 @@ public class CreerObjet extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnValider;
+    private javax.swing.JComboBox<String> cbCategorie;
+    private javax.swing.JComboBox<String> cbSousCategorie;
     private com.toedter.calendar.JDateChooser dateFinChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -225,6 +313,8 @@ public class CreerObjet extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDebut;
     private javax.swing.JTextArea txtDesc;

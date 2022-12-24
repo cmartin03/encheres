@@ -7,6 +7,7 @@ package fr.insastrasbourg.data;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,12 +33,23 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Objet.findAll", query = "SELECT o FROM Objet o"),
     @NamedQuery(name = "Objet.findByObjetId", query = "SELECT o FROM Objet o WHERE o.objetId = :objetId"),
+    // recherchepar libelle (sans tenir compte majuscule minuscule)
     @NamedQuery(name = "Objet.findByLibelle", query = "SELECT o FROM Objet o WHERE lower(o.libelle) like lower(concat('%', :libelle,'%'))"),
     @NamedQuery(name = "Objet.findByDescription", query = "SELECT o FROM Objet o WHERE o.description = :description"),
     @NamedQuery(name = "Objet.findByDebutEnchere", query = "SELECT o FROM Objet o WHERE o.debutEnchere = :debutEnchere"),
     @NamedQuery(name = "Objet.findByFinEnchere", query = "SELECT o FROM Objet o WHERE o.finEnchere = :finEnchere"),
-    @NamedQuery(name = "Objet.findByPrixInitial", query = "SELECT o FROM Objet o WHERE o.prixInitial = :prixInitial")})
+    @NamedQuery(name = "Objet.findByPrixInitial", query = "SELECT o FROM Objet o WHERE o.prixInitial = :prixInitial"),
+    // recherche par catégorie
+    @NamedQuery(name = "Objet.findByCategorie", query = "SELECT o FROM Objet o WHERE o.categorie.categorie = :categorie"),
+})
 public class Objet implements Serializable {
+
+    @JoinColumn(name = "categorie_id", referencedColumnName = "categorie_id")
+    @ManyToOne
+    private Categorie categorie;
+
+    @OneToMany(mappedBy = "objet")
+    private List<Enchere> enchereList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -86,7 +99,15 @@ public class Objet implements Serializable {
     }
 
     public int getDernierPrix() {
-        return this.prixInitial;
+        if (enchereList==null || enchereList.isEmpty())
+            return this.prixInitial;
+        
+        // on cherche le prix le plus élevé
+        int p = this.prixInitial;
+        for (Enchere e : enchereList) {
+            if (e.getPrix() > p) p = e.getPrix();
+        }
+        return p;
     }
 
     public Object[] toArray() {
@@ -180,6 +201,22 @@ public class Objet implements Serializable {
     @Override
     public String toString() {
         return "fr.insastrasbourg.data.Objet[ objetId=" + objetId + " ]";
+    }
+
+    public List<Enchere> getEnchereList() {
+        return enchereList;
+    }
+
+    public void setEnchereList(List<Enchere> enchereList) {
+        this.enchereList = enchereList;
+    }
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
     }
 
 }
