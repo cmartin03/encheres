@@ -5,6 +5,7 @@
 package fr.insastrasbourg.data;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -29,7 +31,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Objet.findAll", query = "SELECT o FROM Objet o"),
     @NamedQuery(name = "Objet.findByObjetId", query = "SELECT o FROM Objet o WHERE o.objetId = :objetId"),
-    @NamedQuery(name = "Objet.findByLibelle", query = "SELECT o FROM Objet o WHERE o.libelle = :libelle"),
+    @NamedQuery(name = "Objet.findByLibelle", query = "SELECT o FROM Objet o WHERE lower(o.libelle) like lower(concat('%', :libelle,'%'))"),
     @NamedQuery(name = "Objet.findByDescription", query = "SELECT o FROM Objet o WHERE o.description = :description"),
     @NamedQuery(name = "Objet.findByDebutEnchere", query = "SELECT o FROM Objet o WHERE o.debutEnchere = :debutEnchere"),
     @NamedQuery(name = "Objet.findByFinEnchere", query = "SELECT o FROM Objet o WHERE o.finEnchere = :finEnchere"),
@@ -63,6 +65,10 @@ public class Objet implements Serializable {
     @ManyToOne
     private Utilisateur utilisateur;
 
+    // donnée non persistante
+    @Transient
+    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
     public Objet() {
     }
 
@@ -77,6 +83,22 @@ public class Objet implements Serializable {
         this.debutEnchere = debutEnchere;
         this.finEnchere = finEnchere;
         this.prixInitial = prixInitial;
+    }
+
+    public int getDernierPrix() {
+        return this.prixInitial;
+    }
+
+    public Object[] toArray() {
+        return new Object[]{
+            this.libelle,
+            df.format(this.finEnchere),
+            getDernierPrix() + "€"
+        };
+    }
+    
+    public String getDateFinEnchereAsString() {
+        return df.format(finEnchere);
     }
 
     public Integer getObjetId() {
@@ -159,5 +181,5 @@ public class Objet implements Serializable {
     public String toString() {
         return "fr.insastrasbourg.data.Objet[ objetId=" + objetId + " ]";
     }
-    
+
 }

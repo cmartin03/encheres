@@ -51,7 +51,11 @@
                   <Component id="btnAddObjet" min="-2" max="-2" attributes="0"/>
                   <Component id="lbl1" min="-2" max="-2" attributes="0"/>
                   <Component id="lbl2" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnConnexion" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="btnConnexion" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnConsulmter" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -63,7 +67,10 @@
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="lblEmail" min="-2" pref="157" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnConnexion" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnConnexion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnConsulmter" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Component id="lbl1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -111,6 +118,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddObjetActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnConsulmter">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Consulter"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConsulmterActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

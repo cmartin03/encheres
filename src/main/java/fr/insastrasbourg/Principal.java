@@ -6,7 +6,8 @@ package fr.insastrasbourg;
 
 import fr.insastrasbourg.data.Utilisateur;
 import fr.insastrasbourg.ui.Connexion;
-import fr.insastrasbourg.ui.EnchereUI;
+import fr.insastrasbourg.ui.ConsulterEnchere;
+import fr.insastrasbourg.ui.CreerObjet;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -88,6 +89,7 @@ public class Principal extends javax.swing.JFrame {
         lbl2 = new javax.swing.JLabel();
         lbl1 = new javax.swing.JLabel();
         btnAddObjet = new javax.swing.JButton();
+        btnConsulmter = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -124,6 +126,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        btnConsulmter.setText("Consulter");
+        btnConsulmter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsulmterActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,7 +147,10 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(btnAddObjet)
                     .addComponent(lbl1)
                     .addComponent(lbl2)
-                    .addComponent(btnConnexion))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConnexion)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConsulmter)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -147,7 +159,9 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnConnexion)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConnexion)
+                    .addComponent(btnConsulmter))
                 .addGap(31, 31, 31)
                 .addComponent(lbl1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -168,9 +182,15 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnAddObjetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddObjetActionPerformed
         // TODO add your handling code here:
-        EnchereUI e = new EnchereUI(this);
+        CreerObjet e = new CreerObjet(this);
         e.setVisible(true);
     }//GEN-LAST:event_btnAddObjetActionPerformed
+
+    private void btnConsulmterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsulmterActionPerformed
+        // TODO add your handling code here:
+        ConsulterEnchere d = new ConsulterEnchere(this);
+        d.setVisible(true);
+    }//GEN-LAST:event_btnConsulmterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,6 +230,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddObjet;
     private javax.swing.JButton btnConnexion;
+    private javax.swing.JButton btnConsulmter;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbl1;
     private javax.swing.JLabel lbl2;
