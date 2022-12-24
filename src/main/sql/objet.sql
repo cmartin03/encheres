@@ -1,6 +1,17 @@
 -- Table: public.objet
 
-DROP TABLE IF EXISTS public.objet;
+--DROP TABLE IF EXISTS public.objet;
+
+CREATE SEQUENCE IF NOT EXISTS public.objet_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1
+    OWNED BY objet.objet_id;
+
+ALTER SEQUENCE public.objet_id_seq
+    OWNER TO postgres;
 
 CREATE TABLE IF NOT EXISTS public.objet
 (

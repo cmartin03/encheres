@@ -4,6 +4,8 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>fr.insastrasbourg.data.Utilisateur</class>
     <class>fr.insastrasbourg.data.Objet</class>
+    <class>fr.insastrasbourg.data.Enchere</class>
+    <class>fr.insastrasbourg.data.Categorie</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/enchere"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

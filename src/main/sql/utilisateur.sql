@@ -1,6 +1,19 @@
 -- Table: public.utilisateur
 
-DROP TABLE IF EXISTS public.utilisateur;
+--DROP TABLE IF EXISTS public.utilisateur;
+
+
+CREATE SEQUENCE IF NOT EXISTS public.utilisateur_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1
+    OWNED BY utilisateur.utilisateur_id;
+
+ALTER SEQUENCE public.utilisateur_id_seq
+    OWNER TO postgres;
+
 
 CREATE TABLE IF NOT EXISTS public.utilisateur
 (
