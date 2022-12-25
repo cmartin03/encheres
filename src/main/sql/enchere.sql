@@ -17,7 +17,7 @@ CREATE SEQUENCE IF NOT EXISTS public.enchere_enchere_id_seq
     MINVALUE 1
     MAXVALUE 2147483647
     CACHE 1
-    OWNED BY enchere.enchere_id;
+    ;
 
 ALTER SEQUENCE public.enchere_enchere_id_seq
     OWNER TO postgres;

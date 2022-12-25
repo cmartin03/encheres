@@ -1,7 +1,11 @@
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/NumericAndLengthFilter.java
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/Principal.java
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/data/Objet.java
+/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/data/Enchere.java
+/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/VoirObjet.java
+/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/CreerObjet.java
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/data/Utilisateur.java
+/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/data/Categorie.java
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/Inscription.java
 /Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/Connexion.java
-/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/EnchereUI.java
+/Users/camillemartin/NetBeansProjects/encheres/src/main/java/fr/insastrasbourg/ui/ConsulterEnchere.java
