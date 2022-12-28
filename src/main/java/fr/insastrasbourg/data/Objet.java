@@ -41,6 +41,8 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Objet.findByPrixInitial", query = "SELECT o FROM Objet o WHERE o.prixInitial = :prixInitial"),
     // recherche par catégorie
     @NamedQuery(name = "Objet.findByCategorie", query = "SELECT o FROM Objet o WHERE o.categorie.categorie = :categorie"),
+    //Recherche par utilisateur, on utilisera l'utilisateur connecté
+    @NamedQuery(name = "Objet.findByUtilisateur", query = "SELECT o FROM Objet o WHERE o.utilisateur = :utilisateur"),
 })
 public class Objet implements Serializable {
 

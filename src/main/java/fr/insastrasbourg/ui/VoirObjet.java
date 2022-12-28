@@ -34,6 +34,7 @@ public class VoirObjet extends javax.swing.JFrame {
         txtDesc.setText(objet.getDescription());
         lblDteFinEnchere.setText(objet.getDateFinEnchereAsString());
         lblErreurEnchere.setText("");
+        lblProprietaire.setText(objet.getUtilisateur().getNom()+ " " + objet.getUtilisateur().getPrenom () );
         
         // affichage liste de encheres
         
@@ -76,6 +77,8 @@ public class VoirObjet extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnEncherir = new javax.swing.JButton();
         lblErreurEnchere = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblProprietaire = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,6 +157,10 @@ public class VoirObjet extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jLabel5.setText("Appartiens à:");
+
+        lblProprietaire.setText("jLabel6");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -170,14 +177,21 @@ public class VoirObjet extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblLibelle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblLibelle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(191, 191, 191))
                             .addComponent(btnFermer, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane2))
                             .addComponent(panelNvlEnchere, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(22, 22, 22))))
+                        .addGap(22, 22, 22))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblProprietaire)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +199,11 @@ public class VoirObjet extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(lblLibelle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(lblProprietaire))
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -284,11 +302,13 @@ public class VoirObjet extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDteFinEnchere;
     private javax.swing.JLabel lblErreurEnchere;
     private javax.swing.JLabel lblLibelle;
+    private javax.swing.JLabel lblProprietaire;
     private javax.swing.JPanel panelNvlEnchere;
     private javax.swing.JTextArea txtDesc;
     private javax.swing.JTextArea txtEncheres;

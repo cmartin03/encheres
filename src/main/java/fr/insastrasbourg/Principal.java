@@ -19,7 +19,7 @@ import javax.swing.JLabel;
  * @author martin
  */
 public class Principal extends javax.swing.JFrame {
-
+   // accès à la BDD unique pour tout le programme, il y a un seul entity manager, mais on l'utilise partout 
     private EntityManager em;
     private Utilisateur utilisateurConnecte;
 
@@ -28,11 +28,12 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        
+        //charge la configuration du fichier persistence.xml dans Meta inf
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "enchere" );
+        //connexion à la BDD
         em = emfactory.createEntityManager();
         
-        //lbl1 (bienvenue), lbl2 (connecté..), btnAddObjet, visible uniquement une fois qu'on esst connecté 
+        //lbl1 (bienvenue), lbl2 (connecté..), btnAddObjet, visible uniquement une fois qu'on est connecté 
         
         lbl1.setVisible(false);
         lbl2.setVisible(false);
@@ -178,7 +179,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
-        // TODO add your handling code here:
+        // Ouvre un nouvel écran, voir écran connexion
+        // en paramètre, c'est l'écran 'Principal' pour avoir accès à la BDD
         Connexion dialog = new Connexion(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnConnexionActionPerformed

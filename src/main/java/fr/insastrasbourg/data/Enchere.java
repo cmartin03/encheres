@@ -37,9 +37,11 @@ public class Enchere implements Serializable {
     private Integer enchereId;
     @Column(name = "prix")
     private Integer prix;
+    
     @JoinColumn(name = "objet_id", referencedColumnName = "objet_id")
     @ManyToOne
     private Objet objet;
+    
     @JoinColumn(name = "utilisateur_id", referencedColumnName = "utilisateur_id")
     @ManyToOne
     private Utilisateur utilisateur;

@@ -70,6 +70,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         btnFermer = new javax.swing.JButton();
         cbCategorie = new javax.swing.JComboBox<>();
+        btnMesObjet = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,6 +122,13 @@ public class ConsulterEnchere extends javax.swing.JFrame {
 
         cbCategorie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        btnMesObjet.setText("Mes objets");
+        btnMesObjet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMesObjetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,6 +136,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnMesObjet)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -151,8 +160,10 @@ public class ConsulterEnchere extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbCategorie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnMesObjet)
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnFermer)
                 .addContainerGap(11, Short.MAX_VALUE))
@@ -180,6 +191,28 @@ public class ConsulterEnchere extends javax.swing.JFrame {
         VoirObjet v = new VoirObjet(principal, o, this);
         v.setVisible(true);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnMesObjetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMesObjetActionPerformed
+        //accès à la base de donnée 
+        EntityManager em = principal.getEntityManager();
+        //masque les enchères, car on ne sait pas encore celle que l'utilisateur va vouloir afficher
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        if (model.getRowCount() > 0) {
+            for (int i = model.getRowCount() - 1; i > -1; i--) {
+                model.removeRow(i);
+            }
+        }
+        // em entity manager, create.. excute une requete, ici la recherche findAll qu'on trouve dans la classe objet 
+        //getResult.. récupère le résulta de la requete 
+            objets = em.createNamedQuery("Objet.findByUtilisateur")
+                    .setParameter("utilisateur", principal.getUtilisateurConnecte() )
+                    .getResultList(); 
+        for (Objet o : objets) {
+            model.addRow(o.toArray());
+        }
+        //model classe qui contient les données 
+        jTable1.setModel(model);
+    }//GEN-LAST:event_btnMesObjetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -218,6 +251,7 @@ public class ConsulterEnchere extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFermer;
+    private javax.swing.JButton btnMesObjet;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbCategorie;
     private javax.swing.JLabel jLabel1;
@@ -227,34 +261,40 @@ public class ConsulterEnchere extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void doAffichage() {
+        //accès à la base de donnée 
         EntityManager em = principal.getEntityManager();
-
+        //masque les enchères, car on ne sait pas encore celle que l'utilisateur va vouloir afficher
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         if (model.getRowCount() > 0) {
             for (int i = model.getRowCount() - 1; i > -1; i--) {
                 model.removeRow(i);
             }
         }
-
+        
         String t = txtSearch.getText();
         String c = cbCategorie.getSelectedItem().toString();
-
+        //On peut rechercher par mot et par catégorie 
         if (t.equals("") && c.equals("")) {
+        // em entity manager, create.. excute une requete, ici la recherche findAll qu'on trouve dans la classe objet 
+        //getResult.. récupère le résulta de la requete 
             objets = em.createNamedQuery("Objet.findAll")
                     .getResultList();
+        //Soit on recherche par catégorie
         } else if (c.equals("")) {
             objets = em.createNamedQuery("Objet.findByLibelle")
                     .setParameter("libelle", t)
                     .getResultList();
+        //Soit on recherche par un mot 
         } else if (t.equals("")) {
             objets = em.createNamedQuery("Objet.findByCategorie")
                     .setParameter("categorie", c)
                     .getResultList();
         }
-
+        //on ajoute les résultats trouvé précedemment dans le tableau 
         for (Objet o : objets) {
             model.addRow(o.toArray());
         }
+        //model classe qui contient les données 
         jTable1.setModel(model);
 
     }

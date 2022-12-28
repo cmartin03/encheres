@@ -139,33 +139,36 @@ public class Connexion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscriptionActionPerformed
+        //avoir 'principal' comme paramètre permet de récupérer l'accès à la BDD qui est dans l'objet principal 
         Inscription dialog = new Inscription(this, true, principal);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnInscriptionActionPerformed
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
-        // TODO add your handling code here:
+        // accès à la BDD, il y a un seul entity manager, mais on l'utilise partout 
         EntityManager em = principal.getEntityManager();
         
         List<Utilisateur> list = em.createNamedQuery("Utilisateur.findByEmailAndPassword")
                 .setParameter("email", txtEmail.getText())
                 .setParameter("password", txtPass.getText())
                 .getResultList();
-        
+        //affichage du message d'erreur si mdp ou email incorrectn
         if (list.isEmpty()) {
             lblMsgError.setVisible(true);
             return;
         }
-        
+        // si pas d'erreur 
         lblMsgError.setVisible(false);
         Utilisateur u = list.get(0);
+        //dans l'objet principal on enregistre l'utilisateur qui vient de se connecter 
+        //tous les écrans savent qui est connecté 
         principal.setUtilisateurConnecte(u);
         
         principal.getLbl1().setText("Bienvenue " + u.getPrenom() + " " + u.getNom());
         principal.getLbl1().setVisible(true);
         principal.getLbl2().setVisible(true);
         principal.getBtnAddObjet().setVisible(true);
-        
+        //ferme la fenetre 
         this.setVisible(false);
     }//GEN-LAST:event_btnConnexionActionPerformed
 
